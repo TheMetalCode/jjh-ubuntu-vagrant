@@ -1,0 +1,5 @@
+alias current_branch='git symbolic-ref --short -q HEAD'
+alias publish_current_branch='grb publish $(current_branch)'
+alias undo_last_commit='git reset HEAD~1'
+alias git_reindex='rm .git/index && git add .'
+alias upgrade_box='sudo apt-get update && sudo apt-get upgrade'
