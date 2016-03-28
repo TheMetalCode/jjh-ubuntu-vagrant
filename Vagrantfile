@@ -2,7 +2,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.box = 'ubuntu/trusty64'
   config.vm.provider 'virtualbox' do |vb|
-    vb.name = 'jjh-ubuntu-vagrant'
+    vb.name = 'ubuntu-vagrant-dev'
     vb.memory = 6144
     vb.cpus = 4
     # This greatly improves performance
@@ -15,21 +15,21 @@ Vagrant.configure(2) do |config|
 
   config.ssh.forward_agent = true
 
+  # Add port forwarding here according to the below example:
   # config.vm.network 'forwarded_port', host: 5432, guest: 5432 #postgres
-  config.vm.network 'forwarded_port', host: 4000, guest: 4000 #hagglundized.net
 
-  # Inject user files
+  # Inject user files from host
   ['~/.gitconfig', '~/.tmux.conf', '~/.vimrc'].each do |file|
     config.vm.provision :file, source: file, destination: file if File.exist?(File.expand_path(file))
   end
 
-  # Inject user dirs
+  # Inject .ssh dir from host
   ['~/.ssh'].each do |dir|
     config.vm.synced_folder '~/' + dir, '/home/vagrant/' + dir if File.exist?(File.expand_path('~/' + dir))
   end
 
-  config.vm.synced_folder '../celeritas', '/home/vagrant/dev/celeritas'
-  config.vm.synced_folder '../hagglundized.net', '/home/vagrant/dev/hagglundized.net'
+  # Add synced folders here according to the below example:
+  # config.vm.synced_folder 'location_on_host_machine', 'desired_location_on_vagrant_vm'
 
   config.vm.provision :shell, privileged: false, path: 'init-box.sh'
 end

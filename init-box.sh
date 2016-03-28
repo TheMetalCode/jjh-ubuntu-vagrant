@@ -5,10 +5,12 @@ set -x
 
 sudo chown -R `whoami` /home/vagrant/dev
 
+# To enable the latest and greatest git to be installed via apt-get
 sudo add-apt-repository -yy ppa:git-core/ppa
 sudo apt-get update
 sudo apt-get -yy upgrade
 sudo apt-get -yy install git nano build-essential apt-transport-https ca-certificates python-pip gnupg2 libgmp3-dev
+# Because who doesn't want to check their internet speed via CLI?
 sudo pip install speedtest-cli
 
 # Install Docker
