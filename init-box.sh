@@ -33,6 +33,21 @@ docker-compose --version
 wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh
 heroku plugins:install heroku-docker
 
+# Install RVM for ruby dependency mgmt
+gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+curl -sSL https://get.rvm.io | bash -s stable
+source ~/.profile
+rvm reload
+rvm autolibs enable
+
+# Install NVM/Node for node/npm dependency mgmt
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash
+source ~/.nvm/nvm.sh
+nvm install stable
+nvm alias default stable
+nvm use default
+npm install -g npm@2.15.1
+
 sudo apt-get -yy autoremove
 
 # git completion, pretty prompt, some aliases
