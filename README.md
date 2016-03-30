@@ -10,3 +10,5 @@ I would also suggest the following Vagrant plugin to keep your Virtualbox Guest 
 ```
 vagrant plugin install vagrant-vbguest
 ```
+
+Given the above, using this setup is rather easy. Clone this repo, cd into the clone, then `vagrant up`.
