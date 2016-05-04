@@ -3,15 +3,21 @@
 set -e
 set -x
 
-sudo chown -R `whoami` /home/vagrant/dev
-
 # To enable the latest and greatest git to be installed via apt-get
 sudo add-apt-repository -yy ppa:git-core/ppa
 sudo apt-get update
 sudo apt-get -yy upgrade
-sudo apt-get -yy install git nano build-essential apt-transport-https ca-certificates python-pip gnupg2 libgmp3-dev
+sudo apt-get -yy install git nano build-essential apt-transport-https ca-certificates python-pip gnupg2 \
+    libgmp3-dev libpq-dev xvfb unzip nfs-kernel-server
 # Because who doesn't want to check their internet speed via CLI?
 sudo pip install speedtest-cli
+
+# Install PhantomJS
+wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
+sudo tar xvjf phantomjs-2.1.1-linux-x86_64.tar.bz2
+sudo mv phantomjs-2.1.1-linux-x86_64 /usr/local/share
+sudo ln -sf /usr/local/share/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin
+echo "phantomjs: $(phantomjs -v)"
 
 # Install Docker
 sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
@@ -26,7 +32,7 @@ sudo usermod -aG docker vagrant
 sudo docker run hello-world
 
 # Install Docker Compose
-curl -L https://github.com/docker/compose/releases/download/1.6.2/docker-compose-`uname -s`-`uname -m` > docker-compose
+curl -L https://github.com/docker/compose/releases/download/1.7.0/docker-compose-`uname -s`-`uname -m` > docker-compose
 sudo mv docker-compose /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
@@ -48,7 +54,7 @@ source ~/.nvm/nvm.sh
 nvm install stable
 nvm alias default stable
 nvm use default
-npm install -g npm@2.15.1
+npm install -g npm@2.15.2
 
 sudo apt-get -yy autoremove
 

@@ -1,0 +1,49 @@
+#!/bin/bash
+
+set -e
+set -x
+
+# adapted from: https://gist.github.com/christopher-hopper/9755310
+# Prereq: VirtualBox installed, Vagrant VM provisioned but not currently running
+
+export VM_NAME=$1
+export DESIRED_SIZE=$2
+export KILL_OLD_VMDK=$3
+
+# whine if $VM_NAME is blank
+
+if [ "$VM_NAME" = "" ]; then
+    echo "Must specify the name of your Vagrant VM whose disk you wish to resize!"
+    exit 1
+fi
+
+# default $DESIRED_SIZE to 102400 (100GB)
+if [ "$DESIRED_SIZE" = "" ]; then
+    export DESIRED_SIZE=102400
+fi
+
+# default $KILL_OLD_VMDK to "no"
+if [ "$KILL_OLD_VMDK" = "" ]; then
+    export KILL_OLD_VMDK="no"
+fi
+
+# switch to vm path
+pushd ~/VirtualBox\ VMs/$VM_NAME
+
+# clone .vmdk to .vdi
+VBoxManage clonehd "box-disk1.vmdk" "clone-disk1.vdi" --format vdi
+
+# resize the .vdi to $DESIRED_SIZE
+VBoxManage modifyhd "clone-disk1.vdi" --resize $DESIRED_SIZE
+
+# wire up the resized .vdi to your VM
+VBoxManage storageattach $VM_NAME --storagectl "SATAController" --port 0 --device 0 --type hdd --medium clone-disk1.vdi
+
+# remove the old .vmdk if specified
+if [ "$KILL_OLD_VMDK" != "no" ]; then
+    echo "Deleting box-disk1.vmdk as specified"
+    rm box-disk1.vmdk
+fi
+
+# jump back to starting dir
+popd
