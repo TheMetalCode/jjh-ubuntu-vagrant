@@ -31,18 +31,19 @@ fi
 pushd ~/VirtualBox\ VMs/$VM_NAME
 
 # clone .vmdk to .vdi
-VBoxManage clonehd "box-disk1.vmdk" "clone-disk1.vdi" --format vdi
+VBoxManage clonehd "ubuntu-xenial-16.04-cloudimg.vmdk" "clone-disk1.vdi" --format vdi
 
 # resize the .vdi to $DESIRED_SIZE
 VBoxManage modifyhd "clone-disk1.vdi" --resize $DESIRED_SIZE
 
 # wire up the resized .vdi to your VM
-VBoxManage storageattach $VM_NAME --storagectl "SATAController" --port 0 --device 0 --type hdd --medium clone-disk1.vdi
+VBoxManage storageattach $VM_NAME --storagectl "SCSI" --port 0 --device 0 --type hdd --medium clone-disk1.vdi
+VBoxManage storageattach jjh-ubuntu-vagrant --storagectl "SCSI" --port 0 --device 0 --type hdd --medium clone-disk1.vdi
 
 # remove the old .vmdk if specified
 if [ "$KILL_OLD_VMDK" != "no" ]; then
-    echo "Deleting box-disk1.vmdk as specified"
-    rm box-disk1.vmdk
+    echo "Deleting ubuntu-xenial-16.04-cloudimg.vmdk as specified"
+    rm ubuntu-xenial-16.04-cloudimg.vmdk
 fi
 
 # jump back to starting dir

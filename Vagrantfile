@@ -1,6 +1,6 @@
 Vagrant.configure(2) do |config|
 
-  config.vm.box = 'ubuntu/trusty64'
+  config.vm.box = 'ubuntu/xenial64'
   config.vm.provider 'virtualbox' do |vb|
     vb.name = 'jjh-ubuntu-vagrant'
     vb.memory = 6144
@@ -23,4 +23,10 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.provision :shell, privileged: false, path: 'init-box.sh'
+
+  # Add desired port forwards here
+  config.vm.network 'forwarded_port', host: 5432, guest: 5432 #postgres
+  config.vm.network 'forwarded_port', host: 6379, guest: 6379 #redis
+
+  # Add desired file syncs here
 end
