@@ -22,19 +22,11 @@ Vagrant.configure(2) do |config|
     config.vm.provision :file, source: file, destination: file if File.exist?(File.expand_path(file))
   end
 
-  # Inject .ssh dir from host
-  ['~/.ssh'].each do |dir|
-    config.vm.synced_folder '~/' + dir, '/home/vagrant/' + dir, type: 'nfs' if File.exist?(File.expand_path('~/' + dir))
-  end
-
   config.vm.provision :shell, privileged: false, path: 'init-box.sh'
 
-  config.vm.network 'forwarded_port', host: 1080, guest: 1080 #mailcatcher
+  # Add desired port forwards here
   config.vm.network 'forwarded_port', host: 5432, guest: 5432 #postgres
   config.vm.network 'forwarded_port', host: 6379, guest: 6379 #redis
-  config.vm.network 'forwarded_port', host: 4000, guest: 4000 #hagglundized.net
 
-  config.vm.synced_folder '../celeritas', '/home/vagrant/dev/celeritas', type: 'nfs'
-  config.vm.synced_folder '../hagglundized.net', '/home/vagrant/dev/hagglundized.net', type: 'nfs'
-  config.vm.synced_folder '../alpine-ruby', '/home/vagrant/dev/alpine-ruby', type: 'nfs'
+  # Add desired file syncs here
 end

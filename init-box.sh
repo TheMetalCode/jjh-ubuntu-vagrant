@@ -13,6 +13,11 @@ sudo apt-get -yy install git nano build-essential apt-transport-https ca-certifi
 # Because who doesn't want to check their internet speed via CLI?
 sudo pip install speedtest-cli
 
+# Java 8
+sudo apt-get -yy install default-jdk
+export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
+echo 'JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"' >> ~/.bash_profile
+
 # Install PhantomJS
 wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
 sudo tar xvjf phantomjs-2.1.1-linux-x86_64.tar.bz2
